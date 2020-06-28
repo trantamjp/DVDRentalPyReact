@@ -4,16 +4,9 @@ import Home from './Home';
 import CustomerTable from './Customer';
 import FilmTable from './Film';
 
-const APIBaseUrl = window.location.protocol + "//" + window.location.hostname + ":5003"
+const APIBaseUrl = window.location.protocol + "//" + window.location.hostname + ":5004"
 const CustomerAPI = APIBaseUrl + "/api/datatable/customers";
 const FilmAPI = APIBaseUrl + "/api/datatable/films";
-
-// const Home = () => (
-//   <div className='home'>
-//     <h1>Welcome to my portfolio website</h1>
-//     <p> Feel free to browse around and learn more about me.</p>
-//   </div>
-// );
 
 const Main = () => (
   <Switch>

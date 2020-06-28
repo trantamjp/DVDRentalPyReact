@@ -9,7 +9,7 @@ def api_countries():
     return country.get_countries()
 
 
-@app.route("/api/datatable/customers", methods=["GET", "POST"])
+@app.route("/api/datatable/customers", methods=["POST"])
 def api_datatable_customers():
     return customer.datatable_search()
 
@@ -24,7 +24,7 @@ def api_languages():
     return language.get_languages()
 
 
-@app.route("/api/datatable/films", methods=["GET", "POST"])
+@app.route("/api/datatable/films", methods=["POST"])
 def api_datatable_films():
     return film.datatable_search()
 

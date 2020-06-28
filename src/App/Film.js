@@ -127,7 +127,9 @@ function Table({
   // Listen for changes in pagination and use the state to fetch our new data
   React.useEffect(() => {
     fetchData({ allColumns, pageIndex, pageSize, filters, sortBy })
-  }, [fetchData, pageIndex, pageSize, filters, sortBy])
+  },
+    // eslint-disable-next-line
+    [fetchData, pageIndex, pageSize, filters, sortBy])
 
   // Render the UI for your table
   return (
@@ -335,7 +337,9 @@ function FilmTable(props) {
         setApiData({ error: error });
         setLoading(false);
       });
-  }, [])
+  },
+    // eslint-disable-next-line
+    [])
 
   return (
     <Styles>

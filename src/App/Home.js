@@ -1,25 +1,46 @@
 import React from 'react';
+import styled from 'styled-components'
+
+function CustomerAPIClick() {
+    document.forms["formCustomerAPI"].submit();
+}
+
+function FilmAPIClick() {
+    document.forms["formFilmAPI"].submit();
+    return false;
+}
+
+const Styles = styled.div`
+span.link {
+    cursor: pointer;
+    text-decoration: underline;
+}
+`
 
 const Home = (props) => (
-    <div>
+    <Styles>
         <h2>Github</h2>
-        <a href="https://github.com/trantamjp/DVDRentalPyReact">https://github.com/trantamjp/DVDRentalPyReact</a>
+        <a href="https://github.com/trantamjp/DVDRentalPyReact" target="_blank" rel="noopener noreferrer">
+            https://github.com/trantamjp/DVDRentalPyReact</a>
         <h2>Sample Data</h2>
-        <h3>Download from here <a href="https://www.postgresqltutorial.com/postgresql-sample-database/">https://www.postgresqltutorial.com/postgresql-sample-database/</a></h3>
+        <h4>Download from here <a href="https://www.postgresqltutorial.com/postgresql-sample-database/" target="_blank" rel="noopener noreferrer">
+            https://www.postgresqltutorial.com/postgresql-sample-database/</a></h4>
+        <p>Please click the link from the top menu</p>
         <ol>
             <li>
-                <p>Customers List<br /><a href="/customers">Customer</a></p>
-                <p>DataTable with server-side processing.<br />
-                The API sample is <a href={props.CustomerAPI} target="_blank" rel="noopener noreferrer" >here</a> (Only first 10 rows).
+                <form id="formCustomerAPI" action={props.CustomerAPI} method="POST" target="_blank"></form>
+                <p>Customer List</p>
+                <p>DataTable with server-side processing, pulling customer data from the API <span className="link" onClick={CustomerAPIClick}>here</span> (showing first 10 rows without parameters).
                 </p>
             </li>
-            <li><p>Films List<br /><a href="/films">Film</a></p>
-                <p>DataTable with server-side processing.<br />
-                The API sample is <a href={props.FilmAPI} target="_blank" rel="noopener noreferrer" >here</a> (Only first 10 rows).
+            <li>
+                <form id="formFilmAPI" action={props.FilmAPI} method="POST" target="_blank"></form>
+                <p>Films List</p>
+                <p>DataTable with server-side processing, pulling customer data from the API <span className="link" onClick={FilmAPIClick}>here</span> (showing first 10 rows without parameters).
                 </p>
             </li>
         </ol>
-    </div>
+    </Styles>
 );
 
 export default Home;

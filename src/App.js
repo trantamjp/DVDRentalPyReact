@@ -1,14 +1,20 @@
 import React from 'react';
-import './App.css';
 import Navigation from './AppNavigation';
 import Main from './App/Main';
+import styled from 'styled-components'
+
+const Styles = styled.div`
+  margin: 0 auto;
+  padding: 20px;
+
+`
 
 const App = () => (
-  <div className='app'>
-    <h1>Python + React Demo</h1>
-    <Navigation />
-    <Main />
-  </div>
+  <Styles>
+      <h1>Python + React Demo</h1>
+      <Navigation />
+      <Main />
+  </Styles>
 );
 
 
