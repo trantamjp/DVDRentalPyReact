@@ -1,3 +1,12 @@
+## Demo
+
+<a href="http://35.215.111.93/" target="_blank">http://35.215.111.93/</a>
+
+## Preparing database
+
+Download sample data from https://www.postgresqltutorial.com/postgresql-sample-database/
+
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
