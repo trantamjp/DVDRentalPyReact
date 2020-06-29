@@ -4,3 +4,5 @@ Flask-SQLAlchemy==2.4.3
 wheel==0.34.2
 psycopg2==2.8.5
 pypugjs==5.9.4
+flask-cors==3.0.8
+python-dotenv==0.13.0
