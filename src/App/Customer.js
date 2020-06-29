@@ -245,7 +245,7 @@ function Table({
 
 function CustomerTable(props) {
 
-  const fetchUrl = props.fetchUrl
+  const customerApiUrl = props.customerApiUrl
   const columns = React.useMemo(
     () => [
       {
@@ -318,7 +318,7 @@ function CustomerTable(props) {
       }
     ));
 
-    fetch(fetchUrl,
+    fetch(customerApiUrl,
       {
         method: 'POST',
         cache: 'no-cache',

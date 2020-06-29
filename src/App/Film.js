@@ -235,7 +235,7 @@ function Table({
 
 function FilmTable(props) {
 
-  const fetchUrl = props.fetchUrl
+  const filmApiUrl = props.filmApiUrl
   const columns = React.useMemo(
     () => [
       {
@@ -303,7 +303,7 @@ function FilmTable(props) {
       }
     ));
 
-    fetch(fetchUrl,
+    fetch(filmApiUrl,
       {
         method: 'POST',
         cache: 'no-cache',

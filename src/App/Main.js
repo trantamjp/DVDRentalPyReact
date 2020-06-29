@@ -4,34 +4,32 @@ import Home from './Home';
 import CustomerTable from './Customer';
 import FilmTable from './Film';
 
-const APIBaseUrl = window.location.protocol + "//" + window.location.hostname + ":5005"
-const CustomerAPI = APIBaseUrl + "/api/datatable/customers";
-const FilmAPI = APIBaseUrl + "/api/datatable/films";
-
-const redirectURL = window.location.protocol + "//" + window.location.hostname
+const APIBASEURL = window.location.protocol + "//" + window.location.hostname + ":5005";
+const CUSTOMER_API_URL = APIBASEURL + "/api/datatable/customers";
+const FILM_API_URL = APIBASEURL + "/api/datatable/films";
 
 const Main = () => (
   <Switch>
-    <Route exact path='/home' component={
-      () => {
-        return <Home CustomerAPI={CustomerAPI} FilmAPI={FilmAPI} />
-      }
-    }></Route>
     <Route exact path='/customers' component=
       {
         () => {
-          return <CustomerTable fetchUrl={CustomerAPI} />
+          return <CustomerTable customerApiUrl={CUSTOMER_API_URL} />
         }
       }>
     </Route>
     <Route exact path='/films' component=
       {
         () => {
-          return <FilmTable fetchUrl={FilmAPI} />
+          return <FilmTable filmApiUrl={FILM_API_URL} />
         }
       }>
     </Route>
-    <Route exact path="/" render={() => (window.location = redirectURL)} />
+    {/* Anything else */}
+    <Route component={
+      () => {
+        return <Home customerApiUrl={CUSTOMER_API_URL} filmApiUrl={FILM_API_URL} />
+      }
+    }></Route>
   </Switch>
 );
 

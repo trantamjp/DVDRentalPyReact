@@ -28,13 +28,13 @@ const Home = (props) => (
         <p>Please click the link from the top menu</p>
         <ol>
             <li>
-                <form id="formCustomerAPI" action={props.CustomerAPI} method="POST" target="_blank"></form>
+                <form id="formCustomerAPI" action={props.customerApiUrl} method="POST" target="_blank"></form>
                 <p>Customer List</p>
                 <p>DataTable with server-side processing, pulling customer data from the API <span className="link" onClick={CustomerAPIClick}>here</span> (showing first 10 rows without parameters).
                 </p>
             </li>
             <li>
-                <form id="formFilmAPI" action={props.FilmAPI} method="POST" target="_blank"></form>
+                <form id="formFilmAPI" action={props.filmApiUrl} method="POST" target="_blank"></form>
                 <p>Films List</p>
                 <p>DataTable with server-side processing, pulling customer data from the API <span className="link" onClick={FilmAPIClick}>here</span> (showing first 10 rows without parameters).
                 </p>
