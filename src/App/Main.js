@@ -4,7 +4,7 @@ import Home from './Home';
 import CustomerTable from './Customer';
 import FilmTable from './Film';
 
-const APIBASEURL = window.location.protocol + "//" + window.location.hostname + ":5005";
+const APIBASEURL = process.env.REACT_APP_APIBASEURL || (window.location.protocol + "//" + window.location.hostname + ":5005");
 const CUSTOMER_API_URL = APIBASEURL + "/api/datatable/customers";
 const FILM_API_URL = APIBASEURL + "/api/datatable/films";
 
