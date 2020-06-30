@@ -56,7 +56,6 @@ class Film(BaseModel):
 
         offset = args.get('offset') or 0
         limit = args.get('limit') or 10
-        orders = args.get('order') or []
         filters = args.get('filters') or {}
         orders = args.get('orders') or []
 
