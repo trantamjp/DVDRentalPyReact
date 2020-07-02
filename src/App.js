@@ -11,7 +11,7 @@ const Styles = styled.div`
 
 const App = () => (
   <Styles>
-      <h1>Python + React Demo</h1>
+      <h1>Python Flask-SQLAlchemy-React Demo</h1>
       <Navigation />
       <Main />
   </Styles>
