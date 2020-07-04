@@ -1,30 +1,31 @@
-from flask import render_template
+from flask import Blueprint
 
-from controllers import category, country, customer, film, language
+from views import (CategoryAPI, CountryAPI, CustomerDatatableAPI,
+                   FilmDatatableAPI, LanguageAPI)
 
-from . import app
+api_blueprint = Blueprint('dvdrental', __name__, url_prefix='/api')
 
+api_blueprint.add_url_rule(
+    '/countries',
+    view_func=CountryAPI.as_view("CountryAPI"),
+)
 
-@app.route("/api/countries")
-def api_countries():
-    return country.get_countries()
+api_blueprint.add_url_rule(
+    '/categories',
+    view_func=CategoryAPI.as_view("CategoryAPI"),
+)
 
+api_blueprint.add_url_rule(
+    '/languages',
+    view_func=LanguageAPI.as_view("LanguageAPI"),
+)
 
-@app.route("/api/datatable/customers", methods=["POST"])
-def api_datatable_customers():
-    return customer.datatable_search()
+api_blueprint.add_url_rule(
+    '/datatable/customers',
+    view_func=CustomerDatatableAPI.as_view("CustomerDatatableAPI"),
+)
 
-
-@app.route("/api/categories")
-def api_categories():
-    return category.get_categories()
-
-
-@app.route("/api/languages")
-def api_languages():
-    return language.get_languages()
-
-
-@app.route("/api/datatable/films", methods=["POST"])
-def api_datatable_films():
-    return film.datatable_search()
+api_blueprint.add_url_rule(
+    '/datatable/films',
+    view_func=FilmDatatableAPI.as_view("FilmDatatableAPI"),
+)
