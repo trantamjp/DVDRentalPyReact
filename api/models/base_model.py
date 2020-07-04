@@ -1,5 +1,3 @@
-from sqlalchemy import Date, DateTime, Numeric
-
 from . import db
 
 
@@ -12,8 +10,8 @@ class BaseModel(db.Model):
             val = getattr(self, column.name)
             d[column.name] = \
                 None if (val is None) \
-                else val.isoformat() if (isinstance(column.type, Date) or isinstance(column.type, DateTime)) \
-                else str(round(val, 2)) if (isinstance(column.type, Numeric)) \
+                else val.isoformat() if (isinstance(column.type, db.Date) or isinstance(column.type, db.DateTime)) \
+                else str(round(val, 2)) if (isinstance(column.type, db.Numeric)) \
                 else val
 
         return d

@@ -1,7 +1,8 @@
 from flask import render_template
 
-from . import app
 from controllers import category, country, customer, film, language
+
+from . import app
 
 
 @app.route("/api/countries")
@@ -27,18 +28,3 @@ def api_languages():
 @app.route("/api/datatable/films", methods=["POST"])
 def api_datatable_films():
     return film.datatable_search()
-
-
-@app.route("/customers")
-def customers():
-    return render_template("customers.pug", title='Customers')
-
-
-@app.route("/films")
-def films():
-    return render_template("films.pug", title='Films')
-
-
-@app.route("/")
-def home():
-    return render_template("home.pug")

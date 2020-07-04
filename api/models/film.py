@@ -1,18 +1,11 @@
-from sqlalchemy import (ARRAY, Column, DateTime, Enum, ForeignKey, Integer,
-                        Numeric, SmallInteger, String, Text, and_, cast,
-                        distinct, func, or_, text)
 from sqlalchemy.dialects.postgresql import TSVECTOR
-from sqlalchemy.orm import contains_eager, relationship
 
-from . import BaseModel
 from .actor import Actor
+from .base_model import BaseModel, db
 from .category import Category
 from .film_actor import FilmActor
 from .film_category import FilmCategory
 from .language import Language
-
-film_actor = FilmActor.__table__
-film_category = FilmCategory.__table__
 
 search_like_escape = BaseModel.search_like_escape
 
@@ -20,33 +13,33 @@ search_like_escape = BaseModel.search_like_escape
 class Film(BaseModel):
     __tablename__ = 'film'
 
-    film_id = Column(Integer, primary_key=True, server_default=text(
+    film_id = db.Column(db.Integer, primary_key=True, server_default=db.text(
         "nextval('film_film_id_seq'::regclass)"))
-    title = Column(String(255), nullable=False, index=True)
-    description = Column(Text)
-    release_year = Column(Integer)
-    language_id = Column(ForeignKey('language.language_id',
-                                    ondelete='RESTRICT', onupdate='CASCADE'), nullable=False, index=True)
-    rental_duration = Column(
-        SmallInteger, nullable=False, server_default=text("3"))
-    rental_rate = Column(Numeric(4, 2), nullable=False,
-                         server_default=text("4.99"))
-    length = Column(SmallInteger)
-    replacement_cost = Column(
-        Numeric(5, 2), nullable=False, server_default=text("19.99"))
-    rating = Column(Enum('G', 'PG', 'PG-13', 'R', 'NC-17',
-                         name='mpaa_rating'), server_default=text("'G'::mpaa_rating"))
-    last_update = Column(DateTime, nullable=False,
-                         server_default=text("now()"))
-    special_features = Column(ARRAY(Text()))
-    fulltext = Column(TSVECTOR, nullable=False, index=True)
+    title = db.Column(db.String(255), nullable=False, index=True)
+    description = db.Column(db.Text)
+    release_year = db.Column(db.Integer)
+    language_id = db.Column(db.ForeignKey('language.language_id',
+                                          ondelete='RESTRICT', onupdate='CASCADE'), nullable=False, index=True)
+    rental_duration = db.Column(
+        db.SmallInteger, nullable=False, server_default=db.text("3"))
+    rental_rate = db.Column(db.Numeric(4, 2), nullable=False,
+                            server_default=db.text("4.99"))
+    length = db.Column(db.SmallInteger)
+    replacement_cost = db.Column(
+        db.Numeric(5, 2), nullable=False, server_default=db.text("19.99"))
+    rating = db.Column(db.Enum('G', 'PG', 'PG-13', 'R', 'NC-17',
+                               name='mpaa_rating'), server_default=db.text("'G'::mpaa_rating"))
+    last_update = db.Column(db.DateTime, nullable=False,
+                            server_default=db.text("now()"))
+    special_features = db.Column(db.ARRAY(db.Text()))
+    fulltext = db.Column(TSVECTOR, nullable=False, index=True)
 
-    language = relationship('Language')
+    language = db.relationship('Language')
 
-    categories = relationship('Category', secondary=film_category,
-                              back_populates="films")
-    actors = relationship('Actor', secondary=film_actor,
-                          back_populates="films")
+    categories = db.relationship('Category', secondary="film_category",
+                                 back_populates="films")
+    actors = db.relationship('Actor', secondary="film_actor",
+                             back_populates="films")
 
     def __repr__(self):
         return '<Film {} {}>'.format(self.film_id, self.title)
@@ -90,12 +83,12 @@ class Film(BaseModel):
                 continue
 
             if filter_id == 'length':
-                rs_filters.append(cast(Film.length, Text).ilike(
+                rs_filters.append(db.cast(Film.length, db.Text).ilike(
                     search_like_escape(search_value)))
                 continue
 
             if filter_id == 'rating':
-                rs_filters.append(cast(Film.rating, Text).ilike(
+                rs_filters.append(db.cast(Film.rating, db.Text).ilike(
                     search_like_escape(search_value)))
                 continue
 
@@ -105,15 +98,15 @@ class Film(BaseModel):
                 continue
 
             if filter_id == 'rental_rate':
-                rs_filters.append(cast(Film.rental_rate, Text).ilike(
+                rs_filters.append(db.cast(Film.rental_rate, db.Text).ilike(
                     search_like_escape(search_value)))
                 continue
 
-        rs_filtered = Film.query.join(Language).filter(and_(*rs_filters))
+        rs_filtered = Film.query.join(Language).filter(db.and_(*rs_filters))
 
         # Count without limit
         records_filtered = rs_filtered.with_entities(
-            func.count(distinct(Film.film_id))).scalar()
+            db.func.count(db.distinct(Film.film_id))).scalar()
 
         order_columns = []
         for order in orders:
@@ -129,7 +122,8 @@ class Film(BaseModel):
                 continue
 
             if order_id == 'rating':
-                order_columns.append([cast(Film.rating, Text), order_desc])
+                order_columns.append(
+                    [db.cast(Film.rating, db.Text), order_desc])
                 continue
 
             if order_id == 'language.name':
@@ -154,7 +148,7 @@ class Film(BaseModel):
         final_query = Film.query \
             .join(filtered_with_limit_subq, Film.film_id == filtered_with_limit_subq.c.film_id) \
             .join(Language).outerjoin(Category, Film.categories).outerjoin(Actor, Film.actors) \
-            .options(contains_eager(Film.language), contains_eager(Film.categories), contains_eager(Film.actors)) \
+            .options(db.contains_eager(Film.language), db.contains_eager(Film.categories), db.contains_eager(Film.actors)) \
             .order_by(*rs_orders)   # Apply order again for eager loading
 
         # Force order on actor and category

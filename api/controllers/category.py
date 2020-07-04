@@ -1,10 +1,10 @@
 from flask import jsonify
 
-from model_factory import ModelFactory
+from models import Category
 
 
 def get_categories():
-    rows = ModelFactory.category.query.order_by(
-        ModelFactory.category.name.asc()).all()
+    rows = Category.query.order_by(
+        Category.name.asc()).all()
     categories = tuple(map(lambda row: row.row2dict(), rows))
     return jsonify(categories)

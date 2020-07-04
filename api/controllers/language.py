@@ -1,10 +1,10 @@
 from flask import jsonify
 
-from model_factory import ModelFactory
+from models import Language
 
 
 def get_languages():
-    rows = ModelFactory.language.query.order_by(
-        ModelFactory.language.name.asc()).all()
+    rows = Language.query.order_by(
+        Language.name.asc()).all()
     languages = list(map(lambda row: row.row2dict(), rows))
     return jsonify(languages)

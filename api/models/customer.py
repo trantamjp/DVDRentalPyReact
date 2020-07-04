@@ -1,9 +1,5 @@
-from sqlalchemy import (Boolean, Column, Date, DateTime, ForeignKey, Integer,
-                        SmallInteger, String, and_, distinct, func, or_, text)
-from sqlalchemy.orm import contains_eager, relationship
-
-from . import BaseModel
 from .address import Address
+from .base_model import BaseModel, db
 from .city import City
 from .country import Country
 
@@ -13,21 +9,22 @@ search_like_escape = BaseModel.search_like_escape
 class Customer(BaseModel):
     __tablename__ = 'customer'
 
-    customer_id = Column(Integer, primary_key=True, server_default=text(
+    customer_id = db.Column(db.Integer, primary_key=True, server_default=db.text(
         "nextval('customer_customer_id_seq'::regclass)"))
-    store_id = Column(SmallInteger, nullable=False, index=True)
-    first_name = Column(String(45), nullable=False)
-    last_name = Column(String(45), nullable=False, index=True)
-    email = Column(String(50))
-    address_id = Column(ForeignKey('address.address_id', ondelete='RESTRICT',
-                                   onupdate='CASCADE'), nullable=False, index=True)
-    activebool = Column(Boolean, nullable=False, server_default=text("true"))
-    create_date = Column(Date, nullable=False,
-                         server_default=text("('now'::text)::date"))
-    last_update = Column(DateTime, server_default=text("now()"))
-    active = Column(Integer)
+    store_id = db.Column(db.SmallInteger, nullable=False, index=True)
+    first_name = db.Column(db.String(45), nullable=False)
+    last_name = db.Column(db.String(45), nullable=False, index=True)
+    email = db.Column(db.String(50))
+    address_id = db.Column(db.ForeignKey('address.address_id', ondelete='RESTRICT',
+                                         onupdate='CASCADE'), nullable=False, index=True)
+    activebool = db.Column(db.Boolean, nullable=False,
+                           server_default=db.text("true"))
+    create_date = db.Column(db.Date, nullable=False,
+                            server_default=db.text("('now'::db.text)::date"))
+    last_update = db.Column(db.DateTime, server_default=db.text("now()"))
+    active = db.Column(db.Integer)
 
-    address = relationship('Address', backref='customers')
+    address = db.relationship('Address', backref='customers')
 
     def __repr__(self):
         return '<Customer {} {} {} -> address_id {}>'.format(self.customer_id, self.first_name, self.last_name, self.address_id)
@@ -67,7 +64,7 @@ class Customer(BaseModel):
 
             if filter_id == 'address.address':
                 search_value_like = search_like_escape(search_value)
-                rs_filters.append(or_(
+                rs_filters.append(db.or_(
                     Address.address.ilike(search_value_like),
                     Address.address2.ilike(search_value_like)
                 ))
@@ -94,11 +91,11 @@ class Customer(BaseModel):
                 continue
 
         rs_filtered = Customer.query.join(Address).join(
-            City).join(Country).filter(and_(*rs_filters))
+            City).join(Country).filter(db.and_(*rs_filters))
 
         # Count without limit
         records_filtered = rs_filtered.with_entities(
-            func.count(distinct(Customer.customer_id))).scalar()
+            db.func.count(db.distinct(Customer.customer_id))).scalar()
 
         order_columns = []
         for order in orders:
@@ -150,7 +147,7 @@ class Customer(BaseModel):
         final_query = Customer.query \
             .join(filtered_with_limit_subq, Customer.customer_id == filtered_with_limit_subq.c.customer_id) \
             .join(Address).join(City).join(Country) \
-            .options(contains_eager(Customer.address).contains_eager(Address.city).contains_eager(City.country)) \
+            .options(db.contains_eager(Customer.address).contains_eager(Address.city).contains_eager(City.country)) \
             .order_by(*rs_orders)   # Apply order again for eager loading
 
         customers = final_query.all()

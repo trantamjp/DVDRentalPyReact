@@ -1,17 +1,16 @@
 import json
-import logging
 
 from flask import jsonify, request
 
 from api import app
-from model_factory import ModelFactory
+from models import Film
 
 
 def datatable_search():
     args = request.json if request.is_json else {}
     app.logger.debug("Input args: %s", args)
 
-    data = ModelFactory.film.datatable_search(args)
+    data = Film.datatable_search(args)
 
     films = []
     for film in data['films']:
