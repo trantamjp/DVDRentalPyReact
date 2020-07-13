@@ -1,14 +1,7 @@
 import React from 'react';
 import styled from 'styled-components'
 
-function CustomerAPIClick() {
-    document.forms["formCustomerAPI"].submit();
-}
-
-function FilmAPIClick() {
-    document.forms["formFilmAPI"].submit();
-    return false;
-}
+import { CUSTOMER_API_URL, FILM_API_URL } from '../config';
 
 const Styles = styled.div`
 span.link {
@@ -17,7 +10,7 @@ span.link {
 }
 `
 
-const Home = (props) => (
+const Home = () => (
     <Styles>
         <h2>Github</h2>
         <a href="https://github.com/trantamjp/DVDRentalPyReact" target="_blank" rel="noopener noreferrer">
@@ -28,15 +21,13 @@ const Home = (props) => (
         <p>Please click the link from the top menu</p>
         <ol>
             <li>
-                <form id="formCustomerAPI" action={props.customerApiUrl} method="POST" target="_blank"></form>
                 <p>Customer List</p>
-                <p>DataTable with server-side processing, pulling customer data from the API <span className="link" onClick={CustomerAPIClick}>here</span> (showing first 10 rows without parameters).
+                <p>DataTable with server-side processing, pulling customer data from the API located at <strong>{CUSTOMER_API_URL}</strong>
                 </p>
             </li>
             <li>
-                <form id="formFilmAPI" action={props.filmApiUrl} method="POST" target="_blank"></form>
                 <p>Films List</p>
-                <p>DataTable with server-side processing, pulling customer data from the API <span className="link" onClick={FilmAPIClick}>here</span> (showing first 10 rows without parameters).
+                <p>DataTable with server-side processing, pulling customer data from the API located at <strong>{FILM_API_URL}</strong>
                 </p>
             </li>
         </ol>

@@ -1,6 +1,5 @@
 import React from 'react';
-import Navigation from './AppNavigation';
-import Main from './App/Main';
+import Navigation from './components/Main';
 import styled from 'styled-components'
 
 const Styles = styled.div`
@@ -11,9 +10,8 @@ const Styles = styled.div`
 
 const App = () => (
   <Styles>
-      <h1>Python Flask-SQLAlchemy-React Demo</h1>
-      <Navigation />
-      <Main />
+    <h1>Python Flask-SQLAlchemy-React Demo</h1>
+    <Navigation />
   </Styles>
 );
 

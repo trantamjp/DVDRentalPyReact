@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { useTable, usePagination, useSortBy, useFilters } from 'react-table'
+import { FILM_API_URL } from '../config';
 
 const Styles = styled.div`
   padding: 1rem;
@@ -52,16 +53,6 @@ const Styles = styled.div`
     padding: 0.5rem;
   }
 `
-
-function actionBoolFilter({ column: { filterValue, Header, setFilter } }) {
-  return (
-    <select onClick={e => { e.stopPropagation(); }} onChange={e => { setFilter(e.target.value || undefined); }}>
-      <option value="">*</option>
-      <option value="1">active</option>
-      <option value="0">Non active</option>
-    </select>
-  );
-}
 
 // Define a default UI for filtering
 function DefaultColumnFilter({ column: { filterValue, Header, setFilter } }) {
@@ -144,7 +135,7 @@ function Table({
   // Render the UI for your table
   return (
     <>
-      <h2>Customer List</h2>
+      <h2>Film List</h2>
       <table {...getTableProps()}>
         <thead>
           {headerGroups.map(headerGroup => (
@@ -155,7 +146,7 @@ function Table({
                     title: 'Toggle sort by ' + column.Header
                   }),
                 )}>
-                  <div className={column.isSorted ? (column.isSortedDesc ? 'sorting_desc' : 'sorting_asc') : 'sorting_both'}>{column.render('Header')}</div>
+                  <div className={column.canSort ? (column.isSorted ? (column.isSortedDesc ? 'sorting_desc' : 'sorting_asc') : 'sorting_both') : ''}>{column.render('Header')}</div>
                   <div>{column.canFilter ? column.render("Filter") : null}</div>
                 </th>
               ))}
@@ -243,51 +234,45 @@ function Table({
   )
 }
 
-function CustomerTable(props) {
+function FilmTable(props) {
 
-  const customerApiUrl = props.customerApiUrl
   const columns = React.useMemo(
     () => [
       {
-        Header: 'First Name',
-        accessor: 'first_name',
+        Header: 'Title',
+        accessor: 'title',
       },
       {
-        Header: 'Last Name',
-        accessor: 'last_name',
+        Header: 'Category',
+        accessor: ((originalRow, rowIndex) =>
+          originalRow.categories.map(category => category.name).join(', ')
+        ),
+        id: 'categories.category',
+        disableSortBy: true,
       },
       {
-        Header: 'Address',
-        accessor: ((originalRow, rowIndex) => {
-          const address = originalRow.address;
-          return [address.address, address.address2].filter(addr => !!addr).join(' ');
-        }),
-        id: 'address.address',
+        Header: 'Actors',
+        accessor: ((originalRow, rowIndex) =>
+          originalRow.actors.map(actor => actor.full_name).join(', ')
+        ),
+        id: 'actors.full_name',
+        disableSortBy: true,
       },
       {
-        Header: 'City',
-        accessor: 'address.city.city',
+        Header: 'Length',
+        accessor: 'length',
       },
       {
-        Header: 'Zip Code',
-        accessor: 'address.postal_code',
+        Header: 'Rating',
+        accessor: 'rating',
       },
       {
-        Header: 'Country',
-        accessor: 'address.city.country.country',
+        Header: 'Lang',
+        accessor: 'language.name',
       },
       {
-        Header: 'Phone',
-        accessor: 'address.phone',
-      },
-      {
-        Header: 'Active',
-        accessor: ((originalRow, rowIndex) => {
-          return originalRow.activebool ? 'active' : 'non-active'
-        }),
-        id: 'activebool',
-        Filter: actionBoolFilter,
-        filter: "includes",
+        Header: 'Price',
+        accessor: 'rental_rate',
       },
     ],
     []
@@ -318,7 +303,7 @@ function CustomerTable(props) {
       }
     ));
 
-    fetch(customerApiUrl,
+    fetch(FILM_API_URL,
       {
         method: 'POST',
         cache: 'no-cache',
@@ -353,7 +338,7 @@ function CustomerTable(props) {
         setLoading(false);
       });
   },
-    // eslint-disable-next-line 
+    // eslint-disable-next-line
     [])
 
   return (
@@ -368,4 +353,4 @@ function CustomerTable(props) {
   )
 }
 
-export default CustomerTable
+export default FilmTable
